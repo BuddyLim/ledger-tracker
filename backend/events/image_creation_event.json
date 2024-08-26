@@ -1,0 +1,5 @@
+{
+    "Records":[{
+        "body": "{\"Records\":[{\"eventVersion\":\"2.1\",\"eventSource\":\"aws:s3\",\"awsRegion\":\"ap-southeast-1\",\"eventTime\":\"2024-08-23T08:45:20.652Z\",\"eventName\":\"ObjectCreated:Put\",\"userIdentity\":{\"principalId\":\"AWS:AROAUTYTCZXRTEJB6N2HF:ledger-tracker-stack-UploadRequestFunction-grPotaWlNwo5\"},\"requestParameters\":{\"sourceIPAddress\":\"119.56.97.0\"},\"responseElements\":{\"x-amz-request-id\":\"P4QZ14929F2A89DN\",\"x-amz-id-2\":\"HtoqoSN6v4CFjXzewMyJhNQngyvJr41NjL+xfHo1bJOhffEUvxrQROPjby+hM2FeZm1JtFByV8sbL5BIvpNH7BzHvQraUehI\"},\"s3\":{\"s3SchemaVersion\":\"1.0\",\"configurationId\":\"NTQ0YTg5ZTItODhhYy00NWQ2LTgzZDUtZjUyMjRmOTVmZjFh\",\"bucket\":{\"name\":\"ledger-tracker-sg-bucket-ap-southeast-1\",\"ownerIdentity\":{\"principalId\":\"A3PL6LW0NAKOJA\"},\"arn\":\"arn:aws:s3:::ledger-tracker-sg-bucket-ap-southeast-1\"},\"object\":{\"key\":\"1/test.png\",\"size\":51471,\"eTag\":\"95b6fd83af42e3b2f94d7427e8cbdc06\",\"versionId\":\"9ku2NhxiL_JFMs8nZNHaiNlBo.RG.vqk\",\"sequencer\":\"0066C84C2097F390BB\"}}}]}"
+    }]
+}

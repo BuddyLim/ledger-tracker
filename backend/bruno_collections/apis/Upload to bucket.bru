@@ -1,0 +1,23 @@
+meta {
+  name: Upload to bucket
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://172.17.0.2:4566/ledger-tracker-sg-bucket-ap-southeast-1/1/test.png?AWSAccessKeyId=LSIAQAAAAAAAM6HBT22Y&Signature=OuWWzISPNACN9%2Bgs7RujxJ6UdUY%3D&content-type=image%2Fpng&x-amz-security-token=FQoGZXIvYXdzEBYaDOic7DwuaxFMwd8LVEeNoFazK61u0Zb80qunb6nHJL1fxj20m%2BHjPTR9zgSMj2y3rtc1A8hk452hJkk4NbSp2xQ7DjGeu4v5QqkhyNdwrClaRLl7io3mp5y0X%2BjxVUZ9ywcAB9%2BmFSfhe46YUIvG5OdE1yWwKc9gQQL9HXUC4BZn8lhy%2Fj0ZFsE9mjAMBZTtK7WBx8EDO%2BSmvBPVrMfORJtGFmW9kfuOH7p2SntsANi0Ne5ohZkTCJqW3E%2Fa5MCoFociCld%2BR4gbydIh%2FpuybGeV13ytR8ysqrVX553Uot9M06kF%2BYnXwHRolaxpZFErcxvQR%2BXqE0yoktYgQx8%3D&Expires=1724400886
+  body: multipartForm
+  auth: none
+}
+
+params:query {
+  AWSAccessKeyId: LSIAQAAAAAAAM6HBT22Y
+  Signature: OuWWzISPNACN9%2Bgs7RujxJ6UdUY%3D
+  content-type: image%2Fpng
+  x-amz-security-token: FQoGZXIvYXdzEBYaDOic7DwuaxFMwd8LVEeNoFazK61u0Zb80qunb6nHJL1fxj20m%2BHjPTR9zgSMj2y3rtc1A8hk452hJkk4NbSp2xQ7DjGeu4v5QqkhyNdwrClaRLl7io3mp5y0X%2BjxVUZ9ywcAB9%2BmFSfhe46YUIvG5OdE1yWwKc9gQQL9HXUC4BZn8lhy%2Fj0ZFsE9mjAMBZTtK7WBx8EDO%2BSmvBPVrMfORJtGFmW9kfuOH7p2SntsANi0Ne5ohZkTCJqW3E%2Fa5MCoFociCld%2BR4gbydIh%2FpuybGeV13ytR8ysqrVX553Uot9M06kF%2BYnXwHRolaxpZFErcxvQR%2BXqE0yoktYgQx8%3D
+  Expires: 1724400886
+}
+
+body:multipart-form {
+  1: @file()
+}

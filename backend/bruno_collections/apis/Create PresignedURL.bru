@@ -1,0 +1,17 @@
+meta {
+  name: Create PresignedURL
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://n7ordoydp7.execute-api.localhost.localstack.cloud:4566/dev/request
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "file_name": "test.png"
+  }
+}

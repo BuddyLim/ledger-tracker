@@ -1,0 +1,29 @@
+meta {
+  name: Upload To Bucket - Live
+  type: http
+  seq: 2
+}
+
+put {
+  url: https://ledger-tracker-sg-bucket-ap-southeast-1.s3.amazonaws.com/1/test.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAUTYTCZXRTNNTUZQY%2F20240823%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240823T082258Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=content-type%3Bexpires%3Bhost&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJn%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDmFwLXNvdXRoZWFzdC0xIkcwRQIgdAyjt8CO93Ak0%2FOUH0X9a%2BmZVSBbnouxXHgpYWV4KS8CIQDtz%2BU%2Bfn6AseM5ZLdsIOBNaVWQHv1TeQ1QbIMA4bq9virRAwii%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDMxNzMzMDczODY1OSIMbGoE4XevWILftcevKqUDgxuK38xiSqNiJ6BZ6ptzxFuLm1Go2dXz0r3OrNhYgCHwhLLnmFhXcj4MRF48HuNnD8Q5Mf8PaHVeqt2aWPYYfnyywGwVgoTVjTZOpcN46omHd1hQvHILLZSDvDjTcaIVuAsCZjsKRTEs3brtwgUWgodrbkc6P5HPw%2F0pGPN1WSBbTOsQsyllkWYUzj8ei%2FEkVN%2Bhkf5KLYKdP60ZVwAqlIMQlZXYWdSjBTCj1gBtVUHteL%2Fe%2FG5u0pn9abbIk6yrP2mfZZe4aGuXa0Lu2vuamzyLbEHnBS6VEvfDKCVdEbIF%2B5aj4krf1maPduIGDZUY0wpiK6%2BvIyv7mIGISFJDSY8VaLZC%2BedFhAP1o1VHGvsNgSRHiPqyD2CoMYMZ5aQ2T83K2GIfOwnXGwSc29rLUlh8N61kb2Ek0mpiGV2naRzgl%2B3y6hXkTzNtW%2BBdC6SmAoq7uMM%2FSz5HpGrb7gjHBFlt5BEljXY4itOznK0QA8fAr7G7jMqR69OlDjkoBKlkP296aL1jYcX%2FkfJJlJcpuMgs3596n2Uraru2KpPOjyvcpLzk1jDhjaG2BjqeAXm7rO1OD3ZjwlPgQaOX1txOz5RmQEu5XksV8J%2FwO6%2FwAPsl%2B0mqTlR8V3Yil92C3Hdvap%2F7VxtwmPzolO2asgMuuDys3lNJs8MDwwuEN5dLsVqdrqWpHI6jnsagB%2BdTNHH2kwQkgwH5mA74yNFiOMJObHnXSNgjakKKP5ebgQn%2FE1TqrRZQWJmbodERqoT0wutF2CrJzdv%2F%2Br7JUKOp&X-Amz-Signature=5df69c53bdd62b3b00a87cc26e4b79613848c4d459a1b787ba23d5d35fea58f2
+  body: multipartForm
+  auth: none
+}
+
+params:query {
+  X-Amz-Algorithm: AWS4-HMAC-SHA256
+  X-Amz-Credential: ASIAUTYTCZXRTNNTUZQY%2F20240823%2Fap-southeast-1%2Fs3%2Faws4_request
+  X-Amz-Date: 20240823T082258Z
+  X-Amz-Expires: 3600
+  X-Amz-SignedHeaders: content-type%3Bexpires%3Bhost
+  X-Amz-Security-Token: IQoJb3JpZ2luX2VjEJn%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDmFwLXNvdXRoZWFzdC0xIkcwRQIgdAyjt8CO93Ak0%2FOUH0X9a%2BmZVSBbnouxXHgpYWV4KS8CIQDtz%2BU%2Bfn6AseM5ZLdsIOBNaVWQHv1TeQ1QbIMA4bq9virRAwii%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDMxNzMzMDczODY1OSIMbGoE4XevWILftcevKqUDgxuK38xiSqNiJ6BZ6ptzxFuLm1Go2dXz0r3OrNhYgCHwhLLnmFhXcj4MRF48HuNnD8Q5Mf8PaHVeqt2aWPYYfnyywGwVgoTVjTZOpcN46omHd1hQvHILLZSDvDjTcaIVuAsCZjsKRTEs3brtwgUWgodrbkc6P5HPw%2F0pGPN1WSBbTOsQsyllkWYUzj8ei%2FEkVN%2Bhkf5KLYKdP60ZVwAqlIMQlZXYWdSjBTCj1gBtVUHteL%2Fe%2FG5u0pn9abbIk6yrP2mfZZe4aGuXa0Lu2vuamzyLbEHnBS6VEvfDKCVdEbIF%2B5aj4krf1maPduIGDZUY0wpiK6%2BvIyv7mIGISFJDSY8VaLZC%2BedFhAP1o1VHGvsNgSRHiPqyD2CoMYMZ5aQ2T83K2GIfOwnXGwSc29rLUlh8N61kb2Ek0mpiGV2naRzgl%2B3y6hXkTzNtW%2BBdC6SmAoq7uMM%2FSz5HpGrb7gjHBFlt5BEljXY4itOznK0QA8fAr7G7jMqR69OlDjkoBKlkP296aL1jYcX%2FkfJJlJcpuMgs3596n2Uraru2KpPOjyvcpLzk1jDhjaG2BjqeAXm7rO1OD3ZjwlPgQaOX1txOz5RmQEu5XksV8J%2FwO6%2FwAPsl%2B0mqTlR8V3Yil92C3Hdvap%2F7VxtwmPzolO2asgMuuDys3lNJs8MDwwuEN5dLsVqdrqWpHI6jnsagB%2BdTNHH2kwQkgwH5mA74yNFiOMJObHnXSNgjakKKP5ebgQn%2FE1TqrRZQWJmbodERqoT0wutF2CrJzdv%2F%2Br7JUKOp
+  X-Amz-Signature: 5df69c53bdd62b3b00a87cc26e4b79613848c4d459a1b787ba23d5d35fea58f2
+}
+
+headers {
+  Content-Type: "multipart/form-data"
+}
+
+body:multipart-form {
+  : @file(/Users/limkuangtar/Downloads/test.png)
+}

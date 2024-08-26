@@ -1,0 +1,17 @@
+meta {
+  name: Create Presigned
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://u8i9m34ml4.execute-api.ap-southeast-1.amazonaws.com/Prod/request
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "file_name":"test.png"
+  }
+}
