@@ -8,6 +8,14 @@ Description: >
 Parameters:
   SourceBucketName:
     Type: String
+  DBUser:
+    Type: String
+  DBPwd:
+    Type: String
+  DBIp:
+    Type: String
+  DBName:
+    Type: String
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -70,6 +78,38 @@ Resources:
           Properties:
             Queue: !GetAtt LedgerS3ImagePutQueue.Arn
             BatchSize: 10
+
+  DBCRUDFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/db_handler/
+      Handler: app.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          DB_USER: !Ref DBUser
+          DB_PWD: !Ref DBPwd
+          DB_IP: !Ref DBIp
+          DB_NAME: !Ref DBName
+
+  QwenFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: functions/qwen_handler/
+      DockerTag: python3.11-v1
+    Properties:
+      PackageType: Image
+      MemorySize: 256
+      Timeout: 20
+      Events:
+        Generate:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /qwen
+            Method: post
 
   LedgerImageBucket:
     Type: AWS::S3::Bucket
@@ -179,6 +219,18 @@ Outputs:
   UploadRequestFunctionIamRole:
     Description: Implicit IAM Role created for Upload Request function
     Value: !GetAtt UploadRequestFunction.Arn
+  DBCRUDFunction:
+    Description: Handles CRUD function for the database
+    Value: !GetAtt DBCRUDFunction.Arn
+  DBCRUDFunctionIamRole:
+    Description: Implicit IAM Role created for DB Handler function
+    Value: !GetAtt DBCRUDFunction.Arn
+  QwenFunction:
+    Description: Handles QWEN interactions
+    Value: !GetAtt QwenFunction.Arn
+  QwenFunctionIamRole:
+    Description: Handles QWEN interactions
+    Value: !GetAtt QwenFunction.Arn
   LedgerImageBucket:
     Description: S3 Bucket Name
     Value: !Ref LedgerImageBucket

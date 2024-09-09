@@ -21,8 +21,8 @@ stack_name = "ledger-tracker-stack"
 s3_prefix = "ledger-tracker-stack"
 region = "ap-southeast-1"
 disable_rollback = true
-image_repositories = []
-parameter_overrides = "SourceBucketName=\"ledger-tracker-sg-bucket-ap-southeast-1\""
+image_repositories = ["QwenFunction=317330738659.dkr.ecr.ap-southeast-1.amazonaws.com/ledgertrackerstackd9757ccc/qwenfunctioncb32bdeerepo"]
+parameter_overrides = "SourceBucketName=\"ledger-tracker-sg-bucket-ap-southeast-1\" DBUser=\"test\" DBPwd=\"test\" DBIp=\"ec2-52-221-181-223.ap-southeast-1.compute.amazonaws.com\" DBName=\"test_db\""
 
 [default.package.parameters]
 resolve_s3 = true

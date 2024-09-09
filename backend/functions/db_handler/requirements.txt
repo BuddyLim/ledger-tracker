@@ -1,0 +1,4 @@
+requests
+boto3-stubs[essential]
+SQLAlchemy
+aws-psycopg2
