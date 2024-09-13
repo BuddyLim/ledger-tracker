@@ -54,15 +54,24 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+      ".popover-content-width-same-as-its-trigger": {
+        width: "var(--radix-popover-trigger-width)",
+        "max-height": "var(--radix-popover-content-available-height)",
+      },
 		keyframes: {
-          "shine": {
-            from: { backgroundPosition: '200% 0' },
-            to: { backgroundPosition: '-200% 0' },
-          },
+      "shine": {
+          from: { backgroundPosition: '200% 0' },
+          to: { backgroundPosition: '-200% 0' },
         },
-        animation: {
-          "shine": "shine 8s ease-in-out infinite",
-        },
+        fadeIn: {
+					from: { opacity: 0 },
+					to: { opacity: 1 },
+				},
+    },
+    animation: {
+        "shine": "shine 8s ease-in-out infinite",
+        fade: 'fadeIn .5s ease-in-out',
+    },
   	}
   },
   plugins: [require("tailwindcss-animate")],

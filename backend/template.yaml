@@ -93,23 +93,30 @@ Resources:
           DB_PWD: !Ref DBPwd
           DB_IP: !Ref DBIp
           DB_NAME: !Ref DBName
-
-  QwenFunction:
-    Type: AWS::Serverless::Function
-    Metadata:
-      Dockerfile: Dockerfile
-      DockerContext: functions/qwen_handler/
-      DockerTag: python3.11-v1
-    Properties:
-      PackageType: Image
-      MemorySize: 256
-      Timeout: 20
       Events:
-        Generate:
+        AddTransactions:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /qwen
+            Path: /transactions/add
             Method: post
+        GetTransactionsPOST:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /transactions
+            Method:
+              - post
+        GetTransactionsGET:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /transactions
+            Method:
+              - get
+        AddNewUser:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /users/new
+            Method:
+              - post
 
   LedgerImageBucket:
     Type: AWS::S3::Bucket
@@ -225,12 +232,6 @@ Outputs:
   DBCRUDFunctionIamRole:
     Description: Implicit IAM Role created for DB Handler function
     Value: !GetAtt DBCRUDFunction.Arn
-  QwenFunction:
-    Description: Handles QWEN interactions
-    Value: !GetAtt QwenFunction.Arn
-  QwenFunctionIamRole:
-    Description: Handles QWEN interactions
-    Value: !GetAtt QwenFunction.Arn
   LedgerImageBucket:
     Description: S3 Bucket Name
     Value: !Ref LedgerImageBucket

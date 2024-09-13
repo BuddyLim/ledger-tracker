@@ -1,14 +1,4 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { DatePickerFormItem } from "@/components/ui/date-picker";
 import {
   Form,
   FormControl,
@@ -17,17 +7,41 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { DatePickerFormItem } from "@/components/ui/date-picker";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
+import {
+  Combobox,
+  CategoryFormSelectionProps,
+} from "@/components/combobox/category-combobox";
+import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { DialogFooter } from "../ui/dialog";
-import { Popover, PopoverTrigger } from "../ui/popover";
-import { useRef } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { Skeleton } from "../ui/skeleton";
+import {
+  AccountCombobox,
+  AccountFormSelectionProps,
+} from "../combobox/account-combobox";
+
+interface SubcategoryProps {
+  name: string;
+  id: string;
+}
 
 const categoryData = [
   {
@@ -36,15 +50,15 @@ const categoryData = [
       id: "category-1",
       subcategory: [
         {
-          name: "Apple",
+          name: "Lunch",
           id: "subcategory-1",
         },
         {
-          name: "Banana",
+          name: "Dinner",
           id: "subcategory-2",
         },
         {
-          name: "Grapes",
+          name: "Coffee",
           id: "subcategory-3",
         },
       ],
@@ -92,48 +106,57 @@ const formSchema = z.object({
     .max(50),
   amount: z.coerce
     .number()
-    .int()
+    .multipleOf(0.01)
     .min(0)
     .nonnegative("Amount cannot be negative!"),
-  category: z
-    .string()
-    .refine((name) =>
-      categoryData.map((categoryObj) =>
-        categoryObj.category.subcategory
-          .map((subCategoryObj) => subCategoryObj.name)
-          .includes(name)
-      )
-    ),
-  account: z
-    .string()
-    .refine((name) =>
-      accountData.map((accountObj) => accountObj.name).includes(name)
-    ),
+  category: z.object({
+    name: z
+      .string()
+      .refine((name) =>
+        categoryData.map((categoryObj) =>
+          categoryObj.category.name.includes(name)
+        )
+      ),
+    id: z
+      .string()
+      .refine((id) =>
+        categoryData.map((categoryObj) => categoryObj.category.id.includes(id))
+      ),
+  }),
+  subCategory: z.object({
+    name: z
+      .string()
+      .refine((name) =>
+        categoryData.map((categoryObj) =>
+          categoryObj.category.subcategory
+            .map((subCategoryObj) => subCategoryObj.name)
+            .includes(name)
+        )
+      ),
+    id: z
+      .string()
+      .refine((id) =>
+        categoryData.map((categoryObj) =>
+          categoryObj.category.subcategory
+            .map((subCategoryObj) => subCategoryObj.id)
+            .includes(id)
+        )
+      ),
+  }),
+  account: z.object({
+    id: z
+      .string()
+      .refine((id) =>
+        accountData.map((accountObj) => accountObj.id).includes(id)
+      ),
+    name: z
+      .string()
+      .refine((name) =>
+        accountData.map((accountObj) => accountObj.name).includes(name)
+      ),
+  }),
   date: z.date(),
 });
-
-const CategorySelection = () => {
-  return (
-    <SelectContent>
-      <SelectGroup>
-        {categoryData.map((categoryObjData) => {
-          return (
-            <div key={categoryObjData.category.id}>
-              <SelectLabel>{categoryObjData.category.name}</SelectLabel>
-              {categoryObjData.category.subcategory.map((subCatObjData) => {
-                return (
-                  <SelectItem key={subCatObjData.id} value={subCatObjData.name}>
-                    {subCatObjData.name}
-                  </SelectItem>
-                );
-              })}
-            </div>
-          );
-        })}
-      </SelectGroup>
-    </SelectContent>
-  );
-};
 
 const AccountSelection = () => {
   return (
@@ -163,6 +186,8 @@ export function TransactionForm() {
     },
   });
 
+  const [suggestionList, setSuggestionList] = useState<SubcategoryProps[]>([]);
+
   const mutation = useMutation({
     mutationFn: () => {
       return fetch("http://127.0.0.1:3000/qwen", {
@@ -177,17 +202,13 @@ export function TransactionForm() {
             .flat(),
         }),
       });
-      // .then(async (res) => {
-      //   const parsedValue = await res.json();
-      //   console.log(parsedValue);
-      // }),
     },
     onError: (error) => {
       console.log(error);
     },
     onSuccess: async (data) => {
-      const value = await data.json();
-      console.log(value);
+      const value: SubcategoryProps[] = await data.json();
+      setSuggestionList(value);
     },
     onSettled: async () => {
       console.log("I'm second!");
@@ -199,22 +220,6 @@ export function TransactionForm() {
     // ✅ This will be type-safe and validated.
     console.log(values);
   };
-
-  const ref = useRef<NodeJS.Timeout | null>(null);
-
-  const handleDebounceInput = () => {
-    if (ref.current) {
-      clearTimeout(ref.current);
-      ref.current = null;
-    }
-
-    ref.current = setTimeout(() => {
-      mutation.mutate();
-      console.log(form.getValues("name"));
-    }, 500);
-  };
-
-  const suggestionList = ["Apple", "Banana", "Grapes"];
 
   return (
     <Form {...form}>
@@ -229,10 +234,11 @@ export function TransactionForm() {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      onBlurCapture={() => mutation.mutate()}
+                      onBlurCapture={() =>
+                        form.getValues("category") == null && mutation.mutate()
+                      }
                       {...field}
                       maxLength={50}
-                      // onInput={handleDebounceInput}
                     />
                   </FormControl>
                   <FormMessage />
@@ -256,58 +262,79 @@ export function TransactionForm() {
             />
           </div>
           <div className="grid gap-4">
-            <div>
-              <FormField
-                control={form.control}
-                name={"category"}
-                render={({ field }) => {
-                  return (
-                    <FormItem key={field.name} className="w-full">
-                      <FormLabel>Category</FormLabel>
+            <FormField
+              control={form.control}
+              name={"subCategory"}
+              render={({ field }) => {
+                return (
+                  <FormItem key={field.name} className="w-full">
+                    <FormLabel>Category</FormLabel>
+                    <div className={`grid gap-4`}>
+                      <FormControl>
+                        <Combobox
+                          placeholder="Select Category"
+                          noEntryText="No category found"
+                          searchText="Search categories"
+                          value={form.getValues("subCategory")?.name}
+                          onSelect={(val: CategoryFormSelectionProps) => {
+                            field.onChange({
+                              name: val.subCategoryName,
+                              id: val.subCategoryId,
+                            });
+                            form.setValue("category", {
+                              name: val.categoryName,
+                              id: val.categoryId,
+                            });
+                          }}
+                          categoryGroupSelectionList={categoryData.map(
+                            (catObj) => {
+                              return {
+                                heading: catObj.category.name,
+                                id: catObj.category.id,
+                                selections: catObj.category.subcategory.map(
+                                  (subObj) => {
+                                    return {
+                                      value: subObj.name,
+                                      id: subObj.id,
+                                      label: subObj.name,
+                                    };
+                                  }
+                                ),
+                              };
+                            }
+                          )}
+                        />
+                      </FormControl>
                       <div
-                        className={`grid ${
-                          field.value == null ? "grid-cols-2" : "grid-cols-1"
-                        } gap-4`}
+                        className={cn(`grid-cols-3 gap-2 grid`, {
+                          grid: field.value == null,
+                          hidden: field.value != null,
+                        })}
                       >
-                        <div>
-                          <Select
-                            onValueChange={(value) => field.onChange(value)}
-                            value={String(field.value)}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                            </FormControl>
-                            <CategorySelection />
-                          </Select>
-                        </div>
-                        <div
-                          className={`${
-                            field.value == null ? "grid" : "hidden"
-                          } grid-cols-3 gap-2`}
-                        >
-                          {suggestionList.map((suggestion) => (
-                            <Button
-                              variant={"secondary"}
-                              className="cursor-pointer h-fit"
-                              key={suggestion}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                field.onChange(suggestion);
-                              }}
-                            >
-                              {suggestion}
-                            </Button>
-                          ))}
-                        </div>
+                        {mutation.isPending
+                          ? [1, 2, 3].map((value) => (
+                              <Skeleton key={value} className="h-9" />
+                            ))
+                          : suggestionList.map(({ id, name }) => (
+                              <Button
+                                variant={"secondary"}
+                                className="cursor-pointer h-fit fade-in-100 fade-out-100"
+                                key={id}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  field.onChange(name);
+                                }}
+                              >
+                                {name}
+                              </Button>
+                            ))}
                       </div>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
           </div>
           <div className="grid grid-rows-1 gap-4">
             <FormField
@@ -317,17 +344,26 @@ export function TransactionForm() {
                 return (
                   <FormItem key={field.name} className="w-full">
                     <FormLabel>Account</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(value)}
-                      value={String(field.value)}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
-                      <AccountSelection />
-                    </Select>
+                    <FormControl>
+                      <AccountCombobox
+                        placeholder="Select Account"
+                        noEntryText="No account found"
+                        searchText="Search account"
+                        value={form.getValues("account")?.name}
+                        onSelect={(val: AccountFormSelectionProps) => {
+                          field.onChange({
+                            name: val.accountName,
+                            id: val.accountId,
+                          });
+                        }}
+                        accountSelectionList={accountData.map((account) => {
+                          return {
+                            accountName: account.name,
+                            accountId: account.id,
+                          };
+                        })}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 );

@@ -28,3 +28,5 @@ dist-ssr
 *.sw?
 
 *.gguf
+
+local_env.json
