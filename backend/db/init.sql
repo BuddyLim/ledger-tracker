@@ -44,7 +44,8 @@ CREATE TABLE transactions (
   category_name varchar NOT NULL,
   description varchar,
   date timestamp with time zone NOT NULL,
-  image varchar,
+  image_url varchar,
+  name varchar,
   type_id uuid
 );
 

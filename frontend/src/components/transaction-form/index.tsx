@@ -8,15 +8,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 import {
@@ -105,7 +96,9 @@ const formSchema = z.object({
     .min(1)
     .max(50),
   amount: z.coerce
-    .number()
+    .number({
+      required_error: "Please insert an amount!",
+    })
     .multipleOf(0.01)
     .min(0)
     .nonnegative("Amount cannot be negative!"),
@@ -123,56 +116,54 @@ const formSchema = z.object({
         categoryData.map((categoryObj) => categoryObj.category.id.includes(id))
       ),
   }),
-  subCategory: z.object({
-    name: z
-      .string()
-      .refine((name) =>
-        categoryData.map((categoryObj) =>
-          categoryObj.category.subcategory
-            .map((subCategoryObj) => subCategoryObj.name)
-            .includes(name)
-        )
-      ),
-    id: z
-      .string()
-      .refine((id) =>
-        categoryData.map((categoryObj) =>
-          categoryObj.category.subcategory
-            .map((subCategoryObj) => subCategoryObj.id)
-            .includes(id)
-        )
-      ),
+  subCategory: z.object(
+    {
+      name: z
+        .string()
+        .refine((name) =>
+          categoryData.map((categoryObj) =>
+            categoryObj.category.subcategory
+              .map((subCategoryObj) => subCategoryObj.name)
+              .includes(name)
+          )
+        ),
+      id: z
+        .string()
+        .refine((id) =>
+          categoryData.map((categoryObj) =>
+            categoryObj.category.subcategory
+              .map((subCategoryObj) => subCategoryObj.id)
+              .includes(id)
+          )
+        ),
+    },
+    {
+      required_error: "Please select a category!",
+    }
+  ),
+  account: z.object(
+    {
+      id: z
+        .string()
+        .refine((id) =>
+          accountData.map((accountObj) => accountObj.id).includes(id)
+        ),
+      name: z
+        .string()
+        .refine((name) =>
+          accountData.map((accountObj) => accountObj.name).includes(name)
+        ),
+    },
+    {
+      required_error: "Please select an account!",
+    }
+  ),
+  date: z.date({
+    required_error: "Please select a date!",
   }),
-  account: z.object({
-    id: z
-      .string()
-      .refine((id) =>
-        accountData.map((accountObj) => accountObj.id).includes(id)
-      ),
-    name: z
-      .string()
-      .refine((name) =>
-        accountData.map((accountObj) => accountObj.name).includes(name)
-      ),
-  }),
-  date: z.date(),
+  description: z.string().max(200).optional(),
+  image: z.any().optional(),
 });
-
-const AccountSelection = () => {
-  return (
-    <SelectContent>
-      <SelectGroup>
-        {accountData.map((accountObj) => {
-          return (
-            <SelectItem key={accountObj.id} value={accountObj.name}>
-              {accountObj.name}
-            </SelectItem>
-          );
-        })}
-      </SelectGroup>
-    </SelectContent>
-  );
-};
 
 export function TransactionForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -396,18 +387,44 @@ export function TransactionForm() {
             />
           </div>
           <div className="grid grid-rows-1 gap-4">
-            <Label htmlFor="amount" className="h-fit">
-              Desc.{" "}
-              <span className="text-muted-foreground text-xs">(optional)</span>
-            </Label>
-            <Textarea />
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem key={field.name} className="grid grid-rows-1">
+                  <FormLabel className="h-fit">
+                    Desc.{" "}
+                    <span className="text-muted-foreground text-xs">
+                      (optional)
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <div className="grid grid-rows-1 gap-4">
-            <Label htmlFor="image" className="h-fit">
-              Image{" "}
-              <span className="text-muted-foreground text-xs">(optional)</span>
-            </Label>
-            <Input id="image" type="file" />
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem key={field.name} className="grid grid-rows-1">
+                  <FormLabel className="h-fit">
+                    Image{" "}
+                    <span className="text-muted-foreground text-xs">
+                      (optional)
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input id="image" type="file" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
         <DialogFooter>

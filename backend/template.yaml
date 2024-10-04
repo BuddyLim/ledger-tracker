@@ -103,20 +103,17 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /transactions
-            Method:
-              - post
+            Method: post
         GetTransactionsGET:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /transactions
-            Method:
-              - get
+            Method: get
         AddNewUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users/new
-            Method:
-              - post
+            Method: post
 
   LedgerImageBucket:
     Type: AWS::S3::Bucket
